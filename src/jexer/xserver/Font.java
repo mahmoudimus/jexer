@@ -167,27 +167,21 @@ public class Font extends Resource {
 
         _maxChar = maxChar;
 
-        // Calculate the minimum and maximum widths.
-        byte[] bytes = new byte[126 - 32 + 1];
-        float[] widths = new float[bytes.length];
+        // Calculate the minimum and maximum widths of the first 256
+        // characters.
 
-        for (int i = 0; i < bytes.length; i++)
-            bytes[i] = (byte) (i + 32);
+        metrics = g2d.getFontMetrics();
+        int [] widths = metrics.getWidths();
+        int minw = widths[0];
+        int maxw = widths[0];
 
-        g2d.getTextWidths(new String(bytes), widths);
-
-        float minw = widths[0];
-        float maxw = widths[0];
-
-        for (float width : widths) {
+        for (int width : widths) {
             if (width < minw) minw = width;
             if (width > maxw) maxw = width;
         }
 
         _minWidth = minw;
         _maxWidth = maxw;
-
-        this.metrics = g2d.getFontMetrics();
 
         _ascent = (short) -metrics.getAscent();
         _descent = (short) metrics.getDescent();
@@ -354,9 +348,10 @@ public class Font extends Resource {
 
         String s = new String(chars);
         Rect bounds = new Rect();
-        float[] widths = new float[numCharInfos];
-
-        _paint.getTextWidths(s, widths);
+        int[] widths = new int[numCharInfos];
+        for (int i = 0; i < widths.length; i++) {
+            widths[i] = metrics.charWidth(chars[i]);
+        }
 
         synchronized (io) {
             Util.writeReplyHeader(client, (byte) 0);
