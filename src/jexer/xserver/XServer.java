@@ -26,16 +26,6 @@
  */
 package jexer.xserver;
 
-/*
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.os.CountDownTimer;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.WindowManager;
- */
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -48,9 +38,11 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.ArrayList;
 
-import au.com.darkside.xserver.Xext.Extensions;
-import au.com.darkside.xserver.Xext.XShape;
-import au.com.darkside.xserver.Xext.XSync;
+import jexer.xserver.Xext.Extensions;
+import jexer.xserver.Xext.XShape;
+import jexer.xserver.Xext.XSync;
+
+import jexer.TApplication;
 
 /**
  * This class implements an X Windows server.
@@ -59,17 +51,13 @@ import au.com.darkside.xserver.Xext.XSync;
  */
 public class XServer {
 
-    static public abstract class OnXSeverStartListener {
-        public abstract void onStart();
-    }
-
     public final short ProtocolMajorVersion = 11;
     public final short ProtocolMinorVersion = 0;
     public final String vendor = "Open source";
     public final int ReleaseNumber = 0;
 
     private final int _port;
-    private final Context _context;
+    private final TApplication _application;
     private final String _windowManagerClass;
     private final ArrayList<Format> _formats;
     private final HashMap<Integer, Resource> _resources;
@@ -105,17 +93,18 @@ public class XServer {
     private final HashSet<Integer> _accessControlHosts;
 
     private final HashMap<String, Extension> _extensions;
-    private OnXSeverStartListener _onStartListener = null;
 
     /**
      * Constructor.
      *
-     * @param c                  The application context.
+     * @param application        The application.
      * @param port               The port to listen on. Usually 6000.
      * @param windowManagerClass Window manager class name. Can be null.
      */
-    public XServer(Context c, int port, String windowManagerClass) {
-        _context = c;
+    public XServer(TApplication application, int port,
+        String windowManagerClass) {
+
+        _application = application;
         _port = port;
         _windowManagerClass = windowManagerClass;
         _formats = new ArrayList<Format>();
@@ -143,7 +132,7 @@ public class XServer {
         addResource(_defaultFont);
         addResource(new Cursor(2, this, null, (Font) null, (Font) null, 0, 1, 0xff000000, 0xffffffff));
 
-        _screen = new ScreenView(_context, this, 3, pixelsPerMillimeter());
+        _screen = new ScreenView(_application, this, 3, pixelsPerMillimeter());
 
         Colormap cmap = new Colormap(4, this, null, _screen);
 
@@ -154,10 +143,6 @@ public class XServer {
         Atom.registerPredefinedAtoms(this);
 
         _timestamp = System.currentTimeMillis();
-    }
-
-    public void setOnStartListener(OnXSeverStartListener l){
-        _onStartListener = l;
     }
 
     /**
@@ -180,6 +165,8 @@ public class XServer {
             int idx = _windowManagerClass.lastIndexOf('.');
 
             if (idx > 0) {
+                // AZL TODO
+                /*
                 String pkg = _windowManagerClass.substring(0, idx);
                 Intent intent = new Intent(Intent.ACTION_MAIN);
 
@@ -191,13 +178,11 @@ public class XServer {
                 } catch (SecurityException e) {
                     Log.e("XServer", "Could not start " + _windowManagerClass + ": " + e.getMessage());
                 }
+                 */
             }
         }
 
         resetScreenSaver();
-
-        if(_onStartListener != null) _onStartListener.onStart();
-
         return true;
     }
 
@@ -236,15 +221,6 @@ public class XServer {
 
         _selections.clear();
         _timestamp = System.currentTimeMillis();
-    }
-
-    /**
-     * Return the server's application context.
-     *
-     * @return The server's application context.
-     */
-    public Context getContext() {
-        return _context;
     }
 
     /**
@@ -369,6 +345,8 @@ public class XServer {
      * @return The number of pixels per millimeter on the display.
      */
     private float pixelsPerMillimeter() {
+        // AZL TODO
+        /*
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager wm = (WindowManager) _context.getSystemService(Context.WINDOW_SERVICE);
 
@@ -376,6 +354,10 @@ public class XServer {
         Font.setDpi((int) metrics.ydpi);    // Use the value since we have it.
 
         return metrics.xdpi / 25.4f;
+         */
+
+        // Assume 96 dpi.
+        return 96.0 / 25.4f;
     }
 
     /**
@@ -540,11 +522,11 @@ public class XServer {
      * @param id The resource ID.
      */
     public int nextFreeResourceId() {
-        int maxKey = 0;  
+        int maxKey = 0;
         for (int cur : _resources.keySet())
             if (cur > maxKey)
-                maxKey = cur;  
-        return maxKey++; 
+                maxKey = cur;
+        return maxKey++;
     }
 
     /**
@@ -829,6 +811,7 @@ public class XServer {
         }
 
         _screenSaverCountDownTimer = new CountDownTimer(offset, offset + 1) {
+
             public void onTick(long millis) {
             }
 
@@ -837,7 +820,7 @@ public class XServer {
                 checkScreenBlank();
             }
         };
-        _screenSaverCountDownTimer.start();
+        _screenSaverCountDownTimer.start(_application);
     }
 
     /**

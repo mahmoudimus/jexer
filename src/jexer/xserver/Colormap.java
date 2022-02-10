@@ -26,8 +26,6 @@
  */
 package jexer.xserver;
 
-import java.awt.Color;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
@@ -321,7 +319,7 @@ public class Colormap extends Resource {
      * @return The value of a black pixel.
      */
     public int getBlackPixel() {
-        return Color.BLACK;
+        return 0;
     }
 
     /**
@@ -330,7 +328,7 @@ public class Colormap extends Resource {
      * @return The value of a white pixel.
      */
     public int getWhitePixel() {
-        return Color.WHITE;
+        return 0xFFFFFF;
     }
 
     /**
