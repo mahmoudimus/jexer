@@ -55,9 +55,11 @@ import android.app.Service;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.nio.charset.StandardCharsets;
 import java.lang.Math;
+
+
 
 /**
  * This class implements an X Windows screen.
@@ -187,7 +189,7 @@ public class ScreenView {
     private Property _sharedClipboardProperty = null;
     private Property _sharedClipboardPrimaryProperty = null;
     private Colormap _defaultColormap = null;
-    private final Vector<Colormap> _installedColormaps;
+    private final ArrayList<Colormap> _installedColormaps;
     private final float _pixelsPerMillimeter;
 
     private Cursor _currentCursor;
@@ -253,30 +255,29 @@ public class ScreenView {
     /**
      * Constructor.
      *
-     * @param c                   The application context.
-     * @param xServer             The X server.
-     * @param rootId              The ID of the root window, to be created later.
+     * @param xServer The X server.
+     * @param rootId The ID of the root window, to be created later.
      * @param pixelsPerMillimeter Screen resolution.
      */
-    public ScreenView(Context c, XServer xServer, int rootId,
-        float pixelsPerMillimeter) {
-
-        super(c);
-
-        setFocusable(true);
-        setFocusableInTouchMode(true);
-
-        _xServer = xServer;
-        _rootId = rootId;
-        _installedColormaps = new Vector<Colormap>();
-        _pixelsPerMillimeter = pixelsPerMillimeter;
-        _paint = new Paint();
-
-        mPendingPointerEvents = new PendingEventQueue<PendingPointerEvent>();
-        mPendingKeyboardEvents = new PendingEventQueue<PendingKeyboardEvent>();
+    public ScreenView(XServer xServer, int rootId, float pixelsPerMillimeter) {
 
         // AZL
         /*
+        setFocusable(true);
+        setFocusableInTouchMode(true);
+         */
+
+        _xServer = xServer;
+        _rootId = rootId;
+        _installedColormaps = new ArrayList<Colormap>();
+        _pixelsPerMillimeter = pixelsPerMillimeter;
+        _paint = new Paint();
+
+        // AZL
+        /*
+        mPendingPointerEvents = new PendingEventQueue<PendingPointerEvent>();
+        mPendingKeyboardEvents = new PendingEventQueue<PendingKeyboardEvent>();
+
         // ---- Listeners for touch input ----
         setOnClickListener(new View.OnClickListener() {
             @Override
@@ -465,8 +466,8 @@ public class ScreenView {
                 return false;
             }
         });
-         */
         requestFocus();
+         */
     }
 
     /**
@@ -484,12 +485,8 @@ public class ScreenView {
 
     /**
      * Placeholder constructor to prevent a compiler warning.
-     *
-     * @param c
      */
-    public ScreenView(Context c) {
-        super(c);
-
+    public ScreenView() {
         _xServer = null;
         _rootId = 0;
         _installedColormaps = null;
@@ -566,12 +563,15 @@ public class ScreenView {
      * @param flag If true, blank the screen. Otherwise unblank it.
      */
     public void blank(boolean flag) {
+        // AZL
+        /*
         if (_isBlanked == flag) return;
 
         _isBlanked = flag;
         postInvalidate();
 
         if (!_isBlanked) _xServer.resetScreenSaver();
+         */
     }
 
     /**
@@ -590,11 +590,14 @@ public class ScreenView {
      * @param cmap The colormap to remove.
      */
     public void removeInstalledColormap(Colormap cmap) {
+        // AZL
+        /*
         _installedColormaps.remove(cmap);
         if (_defaultColormap == cmap) {
             if (_installedColormaps.size() == 0) _defaultColormap = null;
             else _defaultColormap = _installedColormaps.firstElement();
         }
+         */
     }
 
     /**
@@ -664,6 +667,8 @@ public class ScreenView {
      *
      * @param canvas The canvas on which the view will be drawn.
      */
+    // AZL
+    /*
     @Override
     protected void onDraw(Canvas canvas) {
         if (_rootWindow == null) {
@@ -686,6 +691,7 @@ public class ScreenView {
             _drawnCursorY = _currentCursorY;
         }
     }
+     */
 
     /**
      * Called when the size changes.
@@ -767,6 +773,8 @@ public class ScreenView {
      * @param cursor The cursor to draw.
      */
     private void movePointer(int x, int y, Cursor cursor) {
+        // AZL
+        /*
         if (_drawnCursor != null) {
             int left = _drawnCursorX - _drawnCursor.getHotspotX();
             int top = _drawnCursorY - _drawnCursor.getHotspotY();
@@ -785,6 +793,7 @@ public class ScreenView {
         Bitmap bm = cursor.getBitmap();
 
         postInvalidate(left, top, left + bm.getWidth(), top + bm.getHeight());
+         */
     }
 
     /**
@@ -854,6 +863,8 @@ public class ScreenView {
      * @param pressed True if the button was pressed.
      */
     public void updatePointerButtons(int button, boolean pressed) {
+        // AZL
+        /*
         Pointer p = _xServer.getPointer();
 
         button = p.mapButton(button);
@@ -900,7 +911,7 @@ public class ScreenView {
                 Client c = null;
 
                 if (pressed && ew != null) {
-                    Vector<Client> sc;
+                    ArrayList<Client> sc;
 
                     sc = ew.getSelectingClients(EventCode.MaskButtonPress);
                     if (sc != null) c = sc.firstElement();
@@ -941,6 +952,7 @@ public class ScreenView {
                 updatePointer(2);
             }
         }
+         */
     }
 
     /**
@@ -1147,6 +1159,9 @@ public class ScreenView {
      * @throws IOException
      */
     public void write(InputOutput io) throws IOException {
+        // AZL
+
+        /*
         Visual vis = _xServer.getRootVisual();
 
         io.writeInt(_rootWindow.getId());        // Root window ID.
@@ -1172,6 +1187,7 @@ public class ScreenView {
         io.writeShort((short) 1);    // Number of visuals with this depth.
         io.writePadBytes(4);    // Unused.
         vis.write(io);        // The visual at this depth.
+         */
     }
 
     /**
@@ -1538,10 +1554,10 @@ public class ScreenView {
             } else w = (Window) r;
         }
 
-        Vector<Client> dc = null;
+        ArrayList<Client> dc = null;
 
         if (mask == 0) {
-            dc = new Vector<Client>();
+            dc = new ArrayList<Client>();
             dc.add(w.getClient());
         } else if (!propagate) {
             dc = w.getSelectingClients(mask);

@@ -47,7 +47,10 @@ import java.io.IOException;
 public class GContext extends Resource {
     private Paint _paint;
     private Font _font = null;
+    // AZL
+    /*
     private Path.FillType _fillType;
+     */
     private int[] _attributes;
     private Rect[] _clipRectangles = null;
     private int _foregroundColor = 0xff000000;
@@ -87,6 +90,8 @@ public class GContext extends Resource {
     public GContext(int id, XServer xServer, Client client) {
         super(GCONTEXT, id, xServer, client);
 
+        // AZL
+        /*
         _paint = new Paint();
         _attributes = new int[]{3,    // function = Copy
                 0xffffffff,    // plane-mask = all ones
@@ -112,6 +117,7 @@ public class GContext extends Resource {
                 4,    // dashes = 4 (i.e. the list [4,4])
                 1    // arc-mode = PieSlice
         };
+         */
     }
 
     /**
@@ -146,9 +152,12 @@ public class GContext extends Resource {
      *
      * @return The fill type.
      */
+    // AZL
+    /*
     public Path.FillType getFillType() {
         return _fillType;
     }
+     */
 
     /**
      * Return the arc mode.
@@ -190,8 +199,11 @@ public class GContext extends Resource {
         if (r == null || r.getType() != Resource.FONT) return false;
 
         _font = (Font) r;
+        // AZL
+        /*
         _paint.setTypeface(_font.getTypeface());
         _paint.setTextSize(_font.getSize());
+         */
 
         return true;
     }
@@ -202,6 +214,8 @@ public class GContext extends Resource {
      * @param canvas The canvas to apply the rectangles to.
      */
     public void applyClipRectangles(Canvas canvas) {
+        // AZL
+        /*
         if (_clipRectangles == null) return;
 
         if (_clipRectangles.length == 0) canvas.clipRect(0, 0, 0, 0);
@@ -210,6 +224,7 @@ public class GContext extends Resource {
             canvas.clipRect(r);
             canvas.restore();
         }
+         */
     }
 
     /**
@@ -433,6 +448,8 @@ public class GContext extends Resource {
         _foregroundColor = _attributes[AttrForeground] | 0xff000000;
         _backgroundColor = _attributes[AttrBackground] | 0xff000000;
 
+        // AZL
+        /*
         _paint.setColor(_foregroundColor);
         _paint.setStrokeWidth(_attributes[AttrLineWidth]);
 
@@ -469,6 +486,7 @@ public class GContext extends Resource {
             _fillType = Path.FillType.WINDING;
         else    // Defaults to even-odd.
             _fillType = Path.FillType.EVEN_ODD;
+         */
 
         int fid = _attributes[AttrFont];
 

@@ -84,6 +84,8 @@ public class XShape {
     public static void processRequest(XServer xServer, Client client,
         byte opcode, byte arg, int bytesRemaining) throws java.io.IOException {
 
+        // AZL
+        /*
         InputOutput io = client.getInputOutput();
 
         switch (arg) {
@@ -320,6 +322,7 @@ public class XShape {
                 ErrorCode.write(client, ErrorCode.Implementation, opcode, 0);
                 break;
         }
+         */
     }
 
     /**
@@ -335,6 +338,8 @@ public class XShape {
     private static void regionOperate(Window w, byte shapeKind, Region sr,
         byte shapeOp, int x, int y) {
 
+        // AZL
+        /*
         if (sr != null) {    // Apply (x, y) offset.
             Region r = new Region();
             Rect irect = w.getIRect();
@@ -377,6 +382,7 @@ public class XShape {
 
         w.setShapeRegion(shapeKind, sr);
         w.sendShapeNotify(shapeKind);
+         */
     }
 
     /**
@@ -388,10 +394,13 @@ public class XShape {
     private static List<Rect> rectanglesFromRegion(Region r) {
         ArrayList<Rect> rl = new ArrayList<Rect>();
 
+        // AZL
+        /*
         if (r != null && !r.isEmpty()) {
             if (r.isRect()) rl.add(r.getBounds());
             else extractRectangles(r, r.getBounds(), rl);
         }
+         */
 
         return rl;
     }
@@ -407,6 +416,8 @@ public class XShape {
     private static void extractRectangles(Region r, Rect rect,
         ArrayList<Rect> rl) {
 
+        // AZL
+        /*
         int rs = regionRectIntersection(r, rect);
 
         if (rs == 0)    // No intersection with rect.
@@ -431,6 +442,7 @@ public class XShape {
             extractRectangles(r, new Rect(rect.left, rect.top, rect.right, cy), rl);
             extractRectangles(r, new Rect(rect.left, cy, rect.right, rect.bottom), rl);
         }
+         */
     }
 
     /**
@@ -441,6 +453,11 @@ public class XShape {
      * @return 0 = no overlap; 1 = full overlap; -1 = partial overlap.
      */
     private static int regionRectIntersection(final Region r, final Rect rect) {
+        // AZL
+        return 0;
+
+        /*
+
         if (r.quickReject(rect)) return 0;
 
         int icount = 0;
@@ -458,6 +475,7 @@ public class XShape {
         else if (ocount == 0) return 1;
 
         return -1;
+         */
     }
 
     /**
@@ -467,12 +485,16 @@ public class XShape {
      * @return A region equivalent to the non-zero pixels.
      */
     private static Region createRegion(Pixmap p) {
+        // AZL
+        return null;
+        /*
         Drawable d = p.getDrawable();
         Region r = new Region();
 
         extractRegion(r, d.getBitmap(), new Rect(0, 0, d.getWidth(), d.getHeight()));
 
         return r;
+         */
     }
 
     /**
@@ -484,6 +506,8 @@ public class XShape {
      * @param rect   Rectangle containing the pixels.
      */
     private static void extractRegion(Region region, Bitmap bitmap, Rect rect) {
+        // AZL
+        /*
         int nzp = checkNonZeroPixels(bitmap, rect);
 
         if (nzp == 1)    // Empty.
@@ -508,6 +532,7 @@ public class XShape {
             extractRegion(region, bitmap, new Rect(rect.left, rect.top, rect.right, cy));
             extractRegion(region, bitmap, new Rect(rect.left, cy, rect.right, rect.bottom));
         }
+         */
     }
 
     /**
@@ -520,6 +545,9 @@ public class XShape {
      * @return 1 = no pixels set; 2 = all pixels set; 0 = some pixels set
      */
     private static int checkNonZeroPixels(Bitmap bitmap, Rect rect) {
+        // AZL
+        return 0;
+        /*
         final int width = rect.width();
         final int height = rect.height();
         int[] pixels = new int[width];
@@ -535,5 +563,6 @@ public class XShape {
         }
 
         return mask;
+         */
     }
 }

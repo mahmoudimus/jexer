@@ -147,6 +147,8 @@ public class Cursor extends Resource {
         _foregroundColor = foregroundColor;
         _backgroundColor = backgroundColor;
 
+        // AZL
+        /*
         BufferedImage bm = p.getDrawable().getBitmap();
         int width = bm.getWidth();
         int height = bm.getHeight();
@@ -172,6 +174,7 @@ public class Cursor extends Resource {
 
         _bitmap = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         _bitmap.setRGB(0, 0, width, height, pixels, 0, width);
+         */
     }
 
     /**
@@ -218,6 +221,8 @@ public class Cursor extends Resource {
         // AZL - use hotspot from _glyphs
         // _hotspotX = _glyphs[sourceChar][1];
         // _hotspotY = _glyphs[sourceChar][2];
+        _hotspotX = 0;
+        _hotspotY = 0;
     }
 
     /**
@@ -334,6 +339,8 @@ public class Cursor extends Resource {
     public static void processCreateRequest(XServer xServer, Client client,
         byte opcode, int id, int bytesRemaining) throws IOException {
 
+        // AZL
+        /*
         InputOutput io = client.getInputOutput();
 
         if (opcode == RequestCode.CreateCursor) {
@@ -420,5 +427,6 @@ public class Cursor extends Resource {
             xServer.addResource(c);
             client.addResource(c);
         }
+         */
     }
 }

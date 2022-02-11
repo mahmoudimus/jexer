@@ -132,7 +132,7 @@ public class XServer {
         addResource(_defaultFont);
         addResource(new Cursor(2, this, null, (Font) null, (Font) null, 0, 1, 0xff000000, 0xffffffff));
 
-        _screen = new ScreenView(_application, this, 3, pixelsPerMillimeter());
+        _screen = new ScreenView(this, 3, pixelsPerMillimeter());
 
         Colormap cmap = new Colormap(4, this, null, _screen);
 
@@ -357,7 +357,7 @@ public class XServer {
          */
 
         // Assume 96 dpi.
-        return 96.0 / 25.4f;
+        return 96.0f / 25.4f;
     }
 
     /**
@@ -947,7 +947,8 @@ public class XServer {
                     Client c;
 
                     try {
-                        c = new Client(XServer.this, socket, _clientIdBase, _clientIdStep - 1);
+                        // AZL: fix the logger (first arg)
+                        c = new Client(null, XServer.this, socket, _clientIdBase, _clientIdStep - 1);
                         _clients.add(c);
                         c.start();
                         _clientIdBase += _clientIdStep;

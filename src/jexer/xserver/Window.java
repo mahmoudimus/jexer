@@ -137,6 +137,9 @@ public class Window extends Resource {
         _colormap = _screen.getDefaultColormap();
         _inputOnly = inputOnly;
 
+        // AZL
+
+        /*
         if (isRoot) {
             _orect = new Rect(0, 0, width, height);
             _irect = new Rect(0, 0, width, height);
@@ -178,6 +181,7 @@ public class Window extends Resource {
             _attributes[AttrBackgroundPixel] = 0xff000000;
             _drawable = new Drawable(width, height, 32, null, _attributes[AttrBackgroundPixel]);
         }
+         */
 
         _children = new ArrayList<Window>();
         _properties = new HashMap<Integer, Property>();
@@ -198,7 +202,7 @@ public class Window extends Resource {
 
     /**
      * Flag this window as server only.
-     * 
+     *
      * @param b True if this is a hidden server only window.
      */
     public void setIsServerWindow(boolean b) {
@@ -229,6 +233,8 @@ public class Window extends Resource {
      * @param shapeKind The kind of shape.
      */
     public void sendShapeNotify(byte shapeKind) {
+        // AZL
+        /*
         Region r = getShapeRegion(shapeKind);
         boolean shaped = (r != null);
         Rect rect;
@@ -259,6 +265,7 @@ public class Window extends Resource {
             } catch (IOException e) {
             }
         }
+         */
     }
 
     /**
@@ -493,6 +500,8 @@ public class Window extends Resource {
      * @param paint  A paint to draw with.
      */
     public void draw(Canvas canvas, Paint paint) {
+        // AZL
+        /*
         if (!_isMapped) return;
 
         if (_boundingShapeRegion != null) {
@@ -545,6 +554,7 @@ public class Window extends Resource {
 
         canvas.restore();
         if (_boundingShapeRegion != null) canvas.restore();
+         */
     }
 
     /**
@@ -555,6 +565,8 @@ public class Window extends Resource {
      * @return The mapped window containing the point.
      */
     public Window windowAtPoint(int x, int y) {
+        // AZL
+        /*
         for (int i = _children.size() - 1; i >= 0; i--) {
             Window w = _children.elementAt(i);
 
@@ -566,7 +578,7 @@ public class Window extends Resource {
                 return w.windowAtPoint(x, y);
             }
         }
-
+         */
         return this;
     }
 
@@ -728,7 +740,10 @@ public class Window extends Resource {
      * Request a redraw of the window.
      */
     public void invalidate() {
+        // AZL
+        /*
         _screen.postInvalidate(_orect.left, _orect.top, _orect.right, _orect.bottom);
+         */
     }
 
     /**
@@ -740,7 +755,10 @@ public class Window extends Resource {
      * @param height Height of the region.
      */
     public void invalidate(int x, int y, int width, int height) {
+        // AZL
+        /*
         _screen.postInvalidate(_irect.left + x, _irect.top + y, _irect.left + x + width, _irect.top + y + height);
+         */
     }
 
     /**
@@ -898,6 +916,9 @@ public class Window extends Resource {
      */
     private boolean applyValues(Client client, byte opcode, int mask) throws IOException {
         boolean ok = true;
+        // AZL
+        return ok;
+        /*
 
         if ((mask & (1 << AttrBackgroundPixmap)) != 0) {
             int pmid = _attributes[AttrBackgroundPixmap];
@@ -979,6 +1000,7 @@ public class Window extends Resource {
         }
 
         return ok;
+         */
     }
 
     /**
@@ -1821,7 +1843,8 @@ public class Window extends Resource {
             }
         }
 
-        _drawable.getBitmap().recycle();
+        // AZL
+        // _drawable.getBitmap().recycle();
     }
 
     /**
@@ -1834,6 +1857,9 @@ public class Window extends Resource {
      * @throws IOException
      */
     private void reparent(Client client, Window parent, int x, int y) throws IOException {
+
+        // AZL
+        /*
         boolean mapped = _isMapped;
 
         if (mapped) unmap();
@@ -1900,6 +1926,7 @@ public class Window extends Resource {
             map(client);
             if (!_inputOnly) _screen.postInvalidate(orig.left, orig.top, orig.right, orig.bottom);
         }
+         */
     }
 
     /**
@@ -1913,6 +1940,10 @@ public class Window extends Resource {
     private boolean circulate(Client client, int direction) throws IOException {
         Window sw = null;
 
+        // AZL
+        return false;
+
+        /*
         if (direction == 0) {    // Raise lowest occluded.
             for (Window w : _children) {
                 if (occludes(null, w)) {
@@ -1985,6 +2016,7 @@ public class Window extends Resource {
         updateAffectedVisibility();
 
         return true;
+         */
     }
 
     /**
@@ -1997,6 +2029,9 @@ public class Window extends Resource {
      * @return True if occlusion occurs.
      */
     private boolean occludes(Window w1, Window w2) {
+        // AZL
+        return false;
+        /*
         if (w1 == null) {
             if (w2 == null || !w2._isMapped) return false;
 
@@ -2030,6 +2065,7 @@ public class Window extends Resource {
         }
 
         return false;
+         */
     }
 
     /**
@@ -2133,7 +2169,14 @@ public class Window extends Resource {
      * @return True if the window needs to be redrawn.
      * @throws IOException
      */
-    private boolean processConfigureWindow(Client client, int bytesRemaining) throws IOException {
+    private boolean processConfigureWindow(Client client,
+        int bytesRemaining) throws IOException {
+
+        // AZL
+        return false;
+
+        /*
+
         InputOutput io = client.getInputOutput();
 
         if (bytesRemaining < 4) {
@@ -2403,6 +2446,7 @@ public class Window extends Resource {
             _screen.postInvalidate(dirty.left, dirty.top, dirty.right, dirty.bottom);
 
         return changed;
+         */
     }
 
     /**
@@ -2415,10 +2459,15 @@ public class Window extends Resource {
      * @throws IOException
      */
     @Override
-    public void processRequest(Client client, byte opcode, byte arg, int bytesRemaining) throws IOException {
+    public void processRequest(Client client, byte opcode, byte arg,
+        int bytesRemaining) throws IOException {
+
         boolean redraw = false;
         boolean updatePointer = false;
         InputOutput io = client.getInputOutput();
+
+        // AZL
+        /*
 
         switch (opcode) {
             case RequestCode.ChangeWindowAttributes:
@@ -2816,6 +2865,7 @@ public class Window extends Resource {
             invalidate();
             if (updatePointer) _screen.updatePointer(0);
         }
+         */
     }
 
     /**
@@ -2827,6 +2877,11 @@ public class Window extends Resource {
         if (_inputOnly) return NotViewable;
 
         int result = Unobscured;
+
+        // AZL
+        return result;
+
+        /*
 
         for (Window aw = this; aw._parent != null; aw = aw._parent) {
             if (!_isMapped) return NotViewable;    // All ancestors must be mapped.
@@ -2854,6 +2909,7 @@ public class Window extends Resource {
         }
 
         return result;
+         */
     }
 
     /**

@@ -102,6 +102,7 @@ public abstract class CountDownTimer {
                 }
             }
         );
+        return this;
     }
 
 }

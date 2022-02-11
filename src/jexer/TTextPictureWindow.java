@@ -28,11 +28,7 @@
  */
 package jexer;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.ResourceBundle;
-import javax.imageio.ImageIO;
 
 import jexer.event.TKeypressEvent;
 import jexer.event.TMouseEvent;

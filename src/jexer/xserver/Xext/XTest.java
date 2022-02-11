@@ -68,6 +68,8 @@ public class XTest {
     public static void processRequest(XServer xServer, Client client,
         byte opcode, byte arg, int bytesRemaining) throws java.io.IOException {
 
+        // AZL
+        /*
         InputOutput io = client.getInputOutput();
 
         switch (arg) {
@@ -175,6 +177,7 @@ public class XTest {
                 ErrorCode.write(client, ErrorCode.Implementation, opcode, 0);
                 break;
         }
+         */
     }
 
     /**
@@ -196,6 +199,8 @@ public class XTest {
         byte opcode, byte minorOpcode, byte type, int detail, int delay,
         Window root, int x, int y) throws java.io.IOException {
 
+        // AZL
+        /*
         if (delay != 0) {
             try {
                 Thread.sleep(delay);
@@ -238,5 +243,6 @@ public class XTest {
                 ErrorCode.writeWithMinorOpcode(client, ErrorCode.Value, minorOpcode, opcode, type);
                 break;
         }
+         */
     }
 }

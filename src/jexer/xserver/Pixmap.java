@@ -97,6 +97,9 @@ public class Pixmap extends Resource {
     public void processRequest(Client client, byte opcode, byte arg, int bytesRemaining) throws IOException {
         InputOutput io = client.getInputOutput();
 
+        // AZL
+
+        /*
         switch (opcode) {
             case RequestCode.FreePixmap:
                 if (bytesRemaining != 0) {
@@ -141,6 +144,7 @@ public class Pixmap extends Resource {
                 ErrorCode.write(client, ErrorCode.Implementation, opcode, 0);
                 break;
         }
+         */
     }
 
     /**

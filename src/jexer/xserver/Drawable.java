@@ -26,6 +26,8 @@
  */
 package jexer.xserver;
 
+import java.awt.image.BufferedImage;
+
 // AZL
 /*
 import android.graphics.Bitmap;
@@ -44,8 +46,11 @@ import java.io.IOException;
  * @author Matthew Kwan
  */
 public class Drawable {
-    private final Bitmap _bitmap;
+    private final BufferedImage _bitmap;
+    // AZL
+    /*
     private final Canvas _canvas;
+     */
     private final int _depth;
     private Bitmap _backgroundBitmap;
     private int _backgroundColor;
@@ -67,8 +72,13 @@ public class Drawable {
     public Drawable(int width, int height, int depth, Bitmap bgbitmap,
         int bgcolor) {
 
+        // AZL
+        /*
         _bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         _canvas = new Canvas(_bitmap);
+         */
+        _bitmap = null;
+
         _depth = depth;
         _backgroundBitmap = bgbitmap;
         _backgroundColor = bgcolor;
@@ -107,7 +117,9 @@ public class Drawable {
      * @return The drawable's bitmap.
      */
     public Bitmap getBitmap() {
-        return _bitmap;
+        // AZL
+        // return _bitmap;
+        return null;
     }
 
     /**
@@ -143,6 +155,9 @@ public class Drawable {
     public boolean processRequest(XServer xServer, Client client, int id,
         byte opcode, byte arg, int bytesRemaining) throws IOException {
 
+        // AZL
+        return true;
+        /*
         boolean changed = false;
         InputOutput io = client.getInputOutput();
 
@@ -263,6 +278,7 @@ public class Drawable {
         }
 
         return changed;
+         */
     }
 
     /**
@@ -273,6 +289,8 @@ public class Drawable {
      * @throws IOException
      */
     private void processGetImageRequest(Client client, byte format) throws IOException {
+        // AZL
+        /*
         InputOutput io = client.getInputOutput();
         short x = (short) io.readShort();    // X.
         short y = (short) io.readShort();    // Y.
@@ -358,12 +376,15 @@ public class Drawable {
             io.writePadBytes(pad);    // Unused.
         }
         io.flush();
+         */
     }
 
     /**
      * Clear the entire drawable.
      */
     public void clear() {
+        // AZL
+        /*
         if (_backgroundBitmap == null || _backgroundBitmap.isRecycled()) {
             _bitmap.eraseColor(_backgroundColor);
         } else {
@@ -376,6 +397,7 @@ public class Drawable {
                 for (int x = 0; x < width; x += dx)
                     _canvas.drawBitmap(_backgroundBitmap, x, y, null);
         }
+         */
     }
 
     /**
@@ -387,6 +409,8 @@ public class Drawable {
      * @param height Height of the rectangle.
      */
     public void clearArea(int x, int y, int width, int height) {
+        // AZL
+        /*
         Rect r = new Rect(x, y, x + width, y + height);
         Paint paint = new Paint();
 
@@ -417,6 +441,7 @@ public class Drawable {
 
             _canvas.restore();
         }
+         */
     }
 
     /**
@@ -458,9 +483,12 @@ public class Drawable {
 
         if (width <= 0 || height <= 0) return;
 
+        // AZL
+        /*
         Bitmap bm = Bitmap.createBitmap(_bitmap, sx, sy, width, height);
 
         dst._canvas.drawBitmap(bm, dx, dy, gc.getPaint());
+         */
 
         if (dr.getType() == Resource.WINDOW) ((Window) dr).invalidate(dx, dy, width, height);
 
@@ -485,6 +513,8 @@ public class Drawable {
     private void copyPlane(int sx, int sy, int width, int height, int bitPlane,
         Resource dr, int dx, int dy, GContext gc) throws IOException {
 
+        // AZL
+        /*
         Drawable dst;
 
         if (dr.getType() == Resource.PIXMAP) dst = ((Pixmap) dr).getDrawable();
@@ -506,6 +536,7 @@ public class Drawable {
 
         if (gc.getGraphicsExposure())
             EventCode.sendNoExposure(gc.getClient(), dr, RequestCode.CopyPlane);
+         */
     }
 
     /**
@@ -518,6 +549,8 @@ public class Drawable {
      * @param gc Graphics context for drawing the text.
      */
     private void drawImageText(String s, int x, int y, GContext gc) {
+        // AZL
+        /*
         Paint paint = gc.getPaint();
         Font font = gc.getFont();
         Rect rect = new Rect();
@@ -529,6 +562,7 @@ public class Drawable {
 
         paint.setColor(gc.getForegroundColor());
         _canvas.drawText(s, x, y, paint);
+         */
     }
 
     /**
@@ -548,6 +582,10 @@ public class Drawable {
     public boolean processGCRequest(XServer xServer, Client client, int id,
         GContext gc, byte opcode, byte arg, int bytesRemaining) throws IOException {
 
+        // AZL
+        return true;
+
+        /*
         InputOutput io = client.getInputOutput();
         Paint paint = gc.getPaint();
         boolean changed = false;
@@ -768,6 +806,7 @@ public class Drawable {
         _canvas.restore();        // Undo any clip rectangles.
 
         return changed;
+         */
     }
 
     /**
@@ -938,9 +977,13 @@ public class Drawable {
         }
 
         io.readSkip(pad);
+
+        // AZL
+        /*
         Bitmap colorsBmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         colorsBmp.setPixels(colors, 0, width, 0, 0, width, height);
         _canvas.drawBitmap(colorsBmp, dstX, dstY, gc.getPaint());
+         */
 
         return true;
     }
@@ -969,6 +1012,9 @@ public class Drawable {
         float x = (short) io.readShort();
         float y = (short) io.readShort();
 
+        // AZL
+
+        /*
         bytesRemaining -= 4;
         while (bytesRemaining > 1) {
             int length = io.readByte();
@@ -1027,6 +1073,8 @@ public class Drawable {
             }
         }
         io.readSkip(bytesRemaining);
+
+        */
 
         return true;
     }

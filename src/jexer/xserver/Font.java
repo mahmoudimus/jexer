@@ -338,6 +338,9 @@ public class Font extends Resource {
      * @throws IOException
      */
     private void processQueryFontRequest(Client client) throws IOException {
+        // AZL
+        /*
+
         InputOutput io = client.getInputOutput();
         int numFontProperties = (_nameAtom == null) ? 0 : 1;
         int numCharInfos = _maxChar - 31;
@@ -407,6 +410,7 @@ public class Font extends Resource {
             }
         }
         io.flush();
+         */
     }
 
     /**
@@ -418,6 +422,9 @@ public class Font extends Resource {
      */
     private void processQueryTextExtentsRequest(Client client,
         String s) throws IOException {
+
+        // AZL
+        /*
 
         InputOutput io = client.getInputOutput();
         int width = (int) _paint.measureText(s);
@@ -438,6 +445,7 @@ public class Font extends Resource {
             io.writePadBytes(4);    // Unused.
         }
         io.flush();
+         */
     }
 
     /**
